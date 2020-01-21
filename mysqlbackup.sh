@@ -4,48 +4,54 @@
 ###############       @itfinden                    ################
 ###################################################################
 
-# MySQL User
+# MySQL Config
 USER="root"
-# MySQL Password
 PASS="hafizh"
-# MySQL Host
 HOST="localhost"
-# Backup Directory
+
+# Backup Dirctory
 DIR="/home/hafizh/mysqlbackup"
-# Backup Date
+
+# Backup Fecha
 DATE=$(date +"%d-%b-%Y")
-# Baackup Hour
+
+# Backup Hora
 HOURS=$(date +"%H-00")
-# Backup Retain
+
+# Backup Retencion
 RETAIN=2
-# Backup Expire Day / Hour
+
+# Backup Expira
 EXP=2
-# Day to Expire. Set to 0 if you choose expire by hour and set HOUR to n hours
+
+# Día para caducar. Establezca en 0 si elige caducar por hora y establezca HOUR en n horas
 DAY=0
-# Hour to Expire. Set to 0 if you choose expire by day and set DAY to n days
+
+# Hora de caducar. Establezca en 0 si elige caducar por día y establezca DÍA en n días
 HOUR=1
-# Get MySQL Binary full path
+
+# MySQL ruta
 MYSQL=$(which mysql)
 MYSQLDUMP=$(which mysqldump)
 LOG="mysql-backup.log"
 
-echo "Starting Backup ..."
-# Check Backup Directory is exist and create it if not exist
+echo "Iniciando Backup ..."
+# Compruebe que el directorio de copia de seguridad existe y créelo si no existe
 if [ ! -d $DIR ]
 then
-    echo "Directory does not exist! Creating backup directory ..."
+    echo "El directorio no existe! Creando un directorio de respaldo ..."
     mkdir -p $DIR
-    echo "Directory created successfully!" >> $DIR/$LOG
+    echo "Directorio creado con éxito!" >> $DIR/$LOG
     echo "+++++++++++++++++++++++++++++++++++++++++++++++"
-    echo "Starting MySQL Backup" >> $DIR/$LOG
+    echo "Iniciar MySQL Backup" >> $DIR/$LOG
 else 
     echo "" > $DIR/$LOG
-    echo "Starting MySQL Backup" >> $DIR/$LOG
+    echo "Iniciar MySQL Backup" >> $DIR/$LOG
 fi
 
 # Checking MySQL Password
 echo "\n" >> $DIR/$LOG
-echo "Checking MySQL Login ..." >> $DIR/$LOG
+echo "Chequear MySQL Login ..." >> $DIR/$LOG
 echo exit | mysql --user=$USER --password=$PASS -B 2>/dev/null
 if [ "$?" -gt 0 ]; then
   echo "MySQL ${mysql_user} password incorrect" >>  $DIR/$LOG
