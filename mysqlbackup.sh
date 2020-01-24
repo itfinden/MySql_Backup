@@ -6,7 +6,7 @@
 
 # MySQL Config
 USER="root"
-PASS="hafizh"
+PASS="itfinden"
 HOST="localhost"
 
 # Backup Dirctory
