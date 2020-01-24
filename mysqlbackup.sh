@@ -10,7 +10,7 @@ PASS="hafizh"
 HOST="localhost"
 
 # Backup Dirctory
-DIR="/home/hafizh/mysqlbackup"
+DIR="/home/cloud_backup"
 
 # Backup Fecha
 DATE=$(date +"%d-%b-%Y")
