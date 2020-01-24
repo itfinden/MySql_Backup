@@ -66,7 +66,7 @@ echo "\n">> $DIR/$LOG
 echo "Comprobación de vencimiento de Respaldo para liberar espacio ..." >> $DIR/$LOG
 # Checking expire backup
 if [ $DAY != 0 ]; then
-    echo "Expire by Day. Searching expire files " >> $DIR/$LOG
+    echo "Caducar por día Búsqueda de archivos caducados " >> $DIR/$LOG
     for file in $(cd $DIR; find ./ -mindepth 2 -type d -mtime +$[$EXP])
     do
         if [ -z $file ]; then
