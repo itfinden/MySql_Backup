@@ -1,4 +1,4 @@
-#!/bin/bash
+d#!/bin/bash
 ###################################################################
 ###############       Automatic Mysql Backup       ################
 ###############       @itfinden                    ################
@@ -49,21 +49,21 @@ else
     echo "Iniciar MySQL Backup" >> $DIR/$LOG
 fi
 
-# Checking MySQL Password
+# chequeando MySQL Password
 echo "\n" >> $DIR/$LOG
 echo "Chequear MySQL Login ..." >> $DIR/$LOG
 echo exit | mysql --user=$USER --password=$PASS -B 2>/dev/null
 if [ "$?" -gt 0 ]; then
-  echo "MySQL ${mysql_user} password incorrect" >>  $DIR/$LOG
+  echo "MySQL ${mysql_user} password incorrecta" >>  $DIR/$LOG
   exit 1
 else
-  echo "MySQL ${mysql_user} password correct."  >> $DIR/$LOG
+  echo "MySQL ${mysql_user} password correcta."  >> $DIR/$LOG
 fi
 
-# Backup Databases
+# Respaldo Databases
 echo "\n">> $DIR/$LOG
 
-echo "Checking expire backup to free space ..." >> $DIR/$LOG
+echo "Comprobación de vencimiento de Respaldo para liberar espacio ..." >> $DIR/$LOG
 # Checking expire backup
 if [ $DAY != 0 ]; then
     echo "Expire by Day. Searching expire files " >> $DIR/$LOG
@@ -72,39 +72,39 @@ if [ $DAY != 0 ]; then
         if [ -z $file ]; then
             break;
         else
-            echo "Removing $file" >> $DIR/$LOG
+            echo "Borrando $file" >> $DIR/$LOG
             rm -rf $file
         fi
     done;
-    echo "Removing old Directory" >> $DIR/$LOG
+    echo "Borrando directorio antiguo" >> $DIR/$LOG
     find $DIR/ -type d -mtime +$[$EXP] -print0 | xargs -0 rm
 else
-    echo "Expire by Hours. Searching expire files" >> $DIR/$LOG
+    echo "Caducar por horas. Búsqueda de archivos caducados" >> $DIR/$LOG
     for file in $(find $DIR/ -mindepth 2 -type d -mmin +$[$EXP*60])
     do
         echo $file
         if [[ -z "$file" ]]; then
-            echo "No file expired"
+            echo "No hay archivos vencidos"
             break;
         else
-            echo "Removing $file" >> $DIR/$LOG
+            echo "Borrando $file" >> $DIR/$LOG
             rm -rf $file
         fi
     done;
-    echo "Removing old Directory" >> $DIR/$LOG
+    echo "Borrando directorio antiguo" >> $DIR/$LOG
     find $DIR/ -type d -mmin $[$EXP*60] -print0 | xargs -0 rm
 fi
 
-echo "Creating database directory ..." >> $DIR/$LOG
+echo "Creando directorio para Respaldo ..." >> $DIR/$LOG
 mkdir -p $DIR/$DATE/$HOURS
 
 for db in $($MYSQL --user=$USER --password=$PASS -e 'show databases' | egrep -ve 'Database|schema|test|phpmyadmin')
 do
-    echo "Backup database $db" >> $DIR/$LOG
+    echo "Respaldando la base de Datos $db" >> $DIR/$LOG
     $MYSQLDUMP  --user=$USER --password=$PASS --host=$HOST $db | gzip > $DIR/$DATE/$HOURS/$db.sql.gz
     sleep 1
 done
-echo "Creating Backup MySQL Done ..." >> $DIR/$LOG
+echo "Creacion de respaldo realizada ..." >> $DIR/$LOG
 
-echo "Backup done. Exiting ..."
+echo "Respaldo hecho. Saliendo ..."
 exit 0
